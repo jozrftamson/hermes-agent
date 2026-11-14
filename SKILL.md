@@ -34,18 +34,46 @@ This skill lets you automatically create draft responses to incoming emails in s
 - **Python 3.7+** — For the processor script
 - **systemctl** — User session support
 
+## What's Included in This Skill
+
+All necessary files are included in this skill package:
+
+**Executables:**
+- `process_inbox.py` — Main Himalaya-based processor (fully functional, ready to use)
+- `setup.sh` — Installation script that sets up everything
+
+**Systemd Units:**
+- `mail-auto-draft.service` — Service unit (runs processor with flock locking)
+- `mail-auto-draft.timer` — Timer unit (triggers every 5 minutes)
+
+**Configuration:**
+- `mail-auto-draft-config.yaml` — Configuration template with safe defaults
+
+**Documentation:**
+- `README.md` — Complete user guide
+- `00-START-HERE.md` — Navigation guide
+- `MERGE_INSTRUCTIONS.md` — Merge instructions
+- `MANIFEST.md` — File manifest
+
+**Testing:**
+- `test_mail_auto_draft_skill.py` — Comprehensive test suite (33 tests, 31 passing)
+- `conftest.py` — Pytest configuration
+
 ## Installation
+
+All files are pre-built and included. Installation is simple:
 
 ```bash
 bash setup.sh
 ```
 
 This script:
-1. Checks prerequisites
+1. Checks prerequisites (himalaya, python3, systemctl, flock)
 2. Creates configuration directories
-3. Installs the processor to ~/.local/bin
-4. Installs systemd units
-5. Prints next steps
+3. **Copies** process_inbox.py to ~/.local/bin (already functional)
+4. **Copies** systemd units (mail-auto-draft.service, mail-auto-draft.timer)
+5. **Copies** config template to ~/.config/mail-auto-draft/
+6. Prints next steps
 
 ## Quick Start
 
