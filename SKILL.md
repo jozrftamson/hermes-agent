@@ -200,25 +200,49 @@ rate_limit_per_day: 20
 ```
 
 ### Gmail Edge Case
-Gmail's SMTP can succeed (message sent) but IMAP append to Sent folder can fail. The processor logs this as a warning rather than a fatal error. To prevent this, configure Himalaya with folder aliases:
+Gmail's SMTP can succeed (message sent) but IMAP append to Sent folder can fail. The processor logs this as a warning rather than a fatal error. **This is prevented by setting folder aliases in Himalaya configuration.**
+
+**IMPORTANT: Configure all Gmail folder aliases to prevent SMTP-success/IMAP-append-failure edge cases:**
 
 ```toml
-# In ~/.config/himalaya/config.toml
+# In ~/.config/himalaya/config.toml - REQUIRED for Gmail
+[account.gmail]
+backend = "imap"
+imap-host = "imap.gmail.com"
+imap-port = 993
+imap-security = "imaps"
+imap-login = "your-email@gmail.com"
+smtp-host = "smtp.gmail.com"
+smtp-port = 587
+smtp-security = "starttls"
+smtp-login = "your-email@gmail.com"
+
+# REQUIRED: Gmail folder aliases - prevents append failures
 [account.gmail.folder.aliases]
 sent = "[Gmail]/Sent Mail"
+drafts = "[Gmail]/Drafts"
+trash = "[Gmail]/Trash"
+archive = "[Gmail]/All Mail"
+flagged = "[Gmail]/Starred"
+junk = "[Gmail]/Spam"
 ```
+
+**Without these folder aliases, you will experience the SMTP-success/IMAP-append-failure issue where messages are sent via SMTP but fail to append to the Sent folder.**
 
 ## Production Checklist
 
 Before enabling auto-send:
 
 - [ ] Himalaya is configured and works (`himalaya mailbox list`)
+- [ ] **Gmail folder aliases configured** (if using Gmail) - **CRITICAL**
+  - [ ] `[Gmail]/Sent Mail` mapped
+  - [ ] `[Gmail]/Drafts` mapped
+  - [ ] `[Gmail]/Trash` mapped
 - [ ] `own_addresses` is set correctly
 - [ ] `whitelist_senders` is configured
 - [ ] Processor runs in dry-run mode without errors
 - [ ] Drafts are created for test messages
 - [ ] Rate limits are reasonable
-- [ ] Gmail folder aliases are set (if using Gmail)
 - [ ] Logs are being written
 - [ ] Timer runs every 5 minutes
 - [ ] You've reviewed a few drafted messages
