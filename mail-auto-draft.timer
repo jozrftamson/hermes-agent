@@ -1,0 +1,20 @@
+[Unit]
+Description=Mail auto-draft timer (runs every 5 minutes)
+Documentation=file://%h/.config/mail-auto-draft/README.md
+Requires=mail-auto-draft.service
+
+[Timer]
+# Run 2 minutes after boot
+OnBootSec=2min
+
+# Run every 5 minutes after the service completes
+OnUnitActiveSec=5min
+
+# Be accurate to 1 second
+AccuracySec=1s
+
+# Persist timer state across reboots
+Persistent=true
+
+[Install]
+WantedBy=timers.target

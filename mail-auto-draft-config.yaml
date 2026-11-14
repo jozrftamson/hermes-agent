@@ -1,0 +1,79 @@
+# Mail auto-draft configuration
+# Location: ~/.config/mail-auto-draft/config.yaml
+#
+# This file configures the Himalaya-based inbound email auto-draft processor.
+# The processor monitors your mailbox for new unread messages and automatically
+# creates draft replies for safe categories (info requests, appointments, acks).
+#
+# SAFETY FIRST:
+# - By default, drafts are created but NOT sent (dry_run = true)
+# - Auto-send only happens for whitelisted senders
+# - Auto-send only happens for whitelisted categories
+# - Self-replies are always prevented
+# - Rate limits prevent accidental mail storms
+#
+# Enable auto-send only after careful testing in dry-run mode.
+
+# Your email addresses (used to prevent self-reply loops)
+own_addresses:
+  - "user@gmail.com"
+  - "user+auto@gmail.com"
+
+# Whitelist: only these senders can trigger auto-replies
+# Empty list = deny all (default safe mode)
+# Add senders as you verify they are legitimate
+whitelist_senders:
+  - "boss@company.com"
+  - "hr@company.com"
+  - "family@example.com"
+
+# Auto-send flag: send drafts automatically or keep as drafts?
+# IMPORTANT: Keep this false until you've tested in dry-run mode
+# Set to true only AFTER verifying processor behavior
+auto_send_enabled: false
+
+# Rate limiting: prevent accidental mail storms
+rate_limit_per_hour: 5        # Max 5 replies per hour
+rate_limit_per_day: 20        # Max 20 replies per day
+
+# Draft review mode: if true, drafts are created but require manual review
+draft_review_before_send: true
+
+# Logging
+log_level: "INFO"              # DEBUG, INFO, WARNING, ERROR
+log_file: "~/.local/share/mail-auto-draft/processor.log"
+
+# Himalaya mailbox to monitor
+mailbox: "INBOX"
+
+# Categories allowed for auto-send (if auto_send_enabled: true)
+# Supported: information_request, appointment_request, acknowledgement
+safe_categories:
+  - "information_request"
+  - "appointment_request"
+  - "acknowledgement"
+
+# Reply templates (optional customization)
+reply_templates:
+  information_request: |
+    Thank you for your question. I've noted your inquiry and will 
+    get back to you shortly with the information you need.
+    
+    Best regards
+  appointment_request: |
+    Thank you for reaching out to schedule an appointment. 
+    I've received your request and will confirm availability soon.
+    
+    Best regards
+  acknowledgement: |
+    Thank you for your message. I've received it and appreciate you 
+    reaching out.
+    
+    Best regards
+
+# Error notification
+# Set to true to send error logs to a recipient
+error_notification:
+  enabled: false
+  recipient: "you@example.com"
+  on_error: "notify"            # notify | ignore

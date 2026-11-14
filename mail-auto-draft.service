@@ -1,0 +1,40 @@
+[Unit]
+Description=Mail auto-draft service (Himalaya-based inbound auto-reply)
+Documentation=file://%h/.config/mail-auto-draft/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=%u
+WorkingDirectory=%h/.config/mail-auto-draft
+
+# Run processor with flock for exclusivity
+ExecStart=/usr/bin/flock -x /tmp/mail-auto-draft.lock %h/.local/bin/process_inbox.py
+
+# Environment
+Environment="PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="MAIL_AUTO_DRAFT_CONFIG=%h/.config/mail-auto-draft/config.yaml"
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mail-auto-draft
+
+# Security: run as unprivileged user, no network, no device access
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.config/mail-auto-draft %h/.local/share/mail-auto-draft /tmp/mail-auto-draft.lock
+
+# Timeout for a single run
+TimeoutStartSec=120
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=timers.target
