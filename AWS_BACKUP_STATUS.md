@@ -33,7 +33,7 @@ provider = AWS
 env_auth = true
 region = eu-central-1
 location_constraint = eu-central-1
-server_side_encryption = AES256
+server_side_encryption = 
 storage_class = y
 
 [aws-glacier-crypt]
@@ -44,7 +44,7 @@ region = eu-central-1
 location_constraint = eu-central-1
 acl = private
 storage_class = GLACIER
-sse_customer_algorithm = AES256
+sse_customer_algorithm = 
 ```
 
 **Änderungen:**
