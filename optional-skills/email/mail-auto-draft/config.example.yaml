@@ -1,0 +1,38 @@
+# Mail Auto-Draft Configuration
+
+# Own email addresses (used for self-reply protection)
+own_addresses:
+  - your-address@example.com
+  - your-address+alias@example.com
+
+# Processing defaults
+require_unseen: true              # Only process new/unseen messages
+require_new_in_inbox: true        # Only process messages currently in INBOX
+require_whitelist: true           # Require category in whitelist for auto-send
+confidence_threshold: 75          # Confidence score 0-100 for auto-send
+
+# Safe auto-send categories (only these auto-reply when require_whitelist=true)
+whitelist_categories:
+  - info_request
+  - acknowledgment
+
+# Never auto-send these categories (stay as draft-only)
+forbid_sensitive_categories:
+  - sensibel
+  - individuell
+  - unklar
+  - ignorieren
+
+# Gmail-specific folder aliases (required for append-after-send)
+# See: skills/email/himalaya/references/configuration.md:86-94
+gmail_folder_aliases:
+  sent: "[Gmail]/Sent Mail"
+
+# Paths (local to deployment)
+log_dir: logs
+draft_dir: drafts
+data_dir: data
+runtime_dir: runtime
+
+# Mode: 'draft' (no send) or 'auto' (send whitelisted only)
+mode: draft

@@ -1,0 +1,11 @@
+[Unit]
+Description=Process inbox and auto-reply via Himalaya
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/.config/mail-auto-draft
+ExecStart=/usr/bin/flock -n %h/.config/mail-auto-draft/runtime/process_inbox.lock /usr/bin/python3 %h/.config/mail-auto-draft/process_inbox.py --limit 5
+StandardOutput=journal
+StandardError=journal

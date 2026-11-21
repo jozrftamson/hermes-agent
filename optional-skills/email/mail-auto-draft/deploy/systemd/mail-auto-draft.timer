@@ -1,0 +1,12 @@
+[Unit]
+Description=Run mail auto-draft every minute
+Requires=mail-auto-draft.service
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=60s
+Persistent=true
+Unit=mail-auto-draft.service
+
+[Install]
+WantedBy=timers.target

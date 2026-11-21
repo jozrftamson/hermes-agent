@@ -1,0 +1,16 @@
+Subject: {subject}
+From: {from_addr}
+Date: {date}
+
+Message body:
+{body}
+
+---
+
+Task: Classify this email into ONE of these categories:
+- info_request
+- appointment_request
+- acknowledgment
+- uncertain
+
+Respond with ONLY the category name (lowercase), nothing else.
